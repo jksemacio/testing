@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="testing_User")
+@Table(name="testingUser")
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -21,6 +21,16 @@ public class User implements Serializable {
 	private String email;
 	private String password;
 	
+	public User() {
+		
+	}
+	
+	public User(String email, String password) {
+		super();
+		this.email = email;
+		this.password = password;
+	}
+
 	public int getId() {
 		return id;
 	}

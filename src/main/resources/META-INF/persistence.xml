@@ -3,7 +3,7 @@
 	<persistence-unit name="PostgreDS" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>java:jboss/datasources/PostgreDS</jta-data-source>
- 		<class>testing.mode.entity.User</class>
+ 		<class>testing.model.entity.User</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/> <!-- DB Dialect -->
             <property name="hibernate.hbm2ddl.auto" value="update" /> <!-- create / create-drop / update -->
