@@ -22,10 +22,17 @@ public class TestingController implements Serializable	{
 	private UserDAO userDAO;
 	
 	public void add() {
-		System.out.println(user.getEmail());
-		System.out.println(user.getPassword());	
 		userDAO.add(user);
 		user = new User();
+	}
+	
+	public void update() {
+		userDAO.update(user);
+	}
+	
+	public void remove() {
+		System.out.println(user.getId());
+	    userDAO.delete(user.getId());
 	}
 	
 	public User getUser() {

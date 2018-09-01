@@ -13,7 +13,19 @@
   			<h:message for="id" style="color:red"/>  			
   		</h:panelGroup>
   		<br/>
-  		<h:commandLink id="update" value="Update" action="#{testing.remove}"/>
+  		<h:panelGroup>
+  			<h:outputLabel for="email" value="Email"/>
+  			<h:inputText id="email" value="#{testing.user.email}" required="true" requiredMessage="Email is required"/>
+  			<h:message for="email" style="color:red"/>  			
+  		</h:panelGroup>
+  		<br/>
+  		<h:panelGroup>
+  			<h:outputLabel for="password" value="Password"/>
+  			<h:inputSecret id="password" value="#{testing.user.password}" required="true" requiredMessage="Password is required"/>  
+  			<h:message for="email" style="color:red"/>			
+  		</h:panelGroup>
+  		<br/>
+  		<h:commandLink id="update" value="Update" action="#{testing.update}"/>
   		<h:link id="cancel" value="Cancel" outcome="index"/>
   	</h:form>
 </body> 

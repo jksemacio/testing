@@ -11,9 +11,9 @@ public class UserDAO implements IUserDAO {
 	private String persistenceUnit = "PostgreDS";
 	private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnit);
 
-	public User getById(User user) {
+	public User getById(int id) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		return entityManager.find(User.class, user.getId());
+		return entityManager.find(User.class, id);
 	}
 
 	public void add(User user) {
@@ -33,8 +33,9 @@ public class UserDAO implements IUserDAO {
 	}
 
 
-	public void delete(User user) {
+	public void delete(int id) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		User user = entityManager.find(User.class, id);
 		entityManager.getTransaction().begin();
 		entityManager.remove(user);
 		entityManager.getTransaction().commit();
