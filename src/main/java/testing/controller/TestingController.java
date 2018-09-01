@@ -3,14 +3,14 @@ package testing.controller;
 import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 
-import testing.model.dao.UserDAO;
+import testing.model.dao.IUserDAO;
 import testing.model.entity.User;
 
 @ManagedBean(name="testing", eager=true)
-@SessionScoped
+@RequestScoped
 public class TestingController implements Serializable	{
 	
 	private static final long serialVersionUID = 1L;
@@ -19,7 +19,7 @@ public class TestingController implements Serializable	{
 	private User user;
 	
 	@Inject
-	private UserDAO userDAO;
+	private IUserDAO userDAO;
 	
 	public void search() {
 		user = userDAO.getById(user.getId());
@@ -27,7 +27,6 @@ public class TestingController implements Serializable	{
 	
 	public void add() {
 		userDAO.add(user);
-		user = new User();
 	}
 	
 	public void update() {

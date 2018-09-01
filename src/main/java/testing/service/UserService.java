@@ -1,27 +1,31 @@
 package testing.service;
 
 import testing.model.entity.User;
-import testing.model.dao.UserDAO;;
+
+import javax.inject.Inject;
+
+import testing.model.dao.IUserDAO;;
 
 public class UserService implements IUserService {
 	
-	private UserDAO UserDAO = new UserDAO();
+	@Inject
+	private IUserDAO userDAO;
 
-	public User getById(User user) {
-		return UserDAO.getById(user);
+	public User getById(int id) {
+		return userDAO.getById(id);
 	}
 
 	public void add(User user) {
-		UserDAO.add(user);
+		userDAO.add(user);
 	}
 
 	public void update(User user) {
-		UserDAO.update(user);
+		userDAO.update(user);
 
 	}
 
-	public void delete(User user) {
-		UserDAO.delete(user);
+	public void delete(int id) {
+		userDAO.delete(id);
 	}
 
 }
