@@ -21,6 +21,10 @@ public class TestingController implements Serializable	{
 	@Inject
 	private UserDAO userDAO;
 	
+	public void search() {
+		user = userDAO.getById(user.getId());
+	}
+	
 	public void add() {
 		userDAO.add(user);
 		user = new User();
@@ -31,7 +35,6 @@ public class TestingController implements Serializable	{
 	}
 	
 	public void remove() {
-		System.out.println(user.getId());
 	    userDAO.delete(user.getId());
 	}
 	

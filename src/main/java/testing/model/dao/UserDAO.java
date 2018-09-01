@@ -13,7 +13,9 @@ public class UserDAO implements IUserDAO {
 
 	public User getById(int id) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		return entityManager.find(User.class, id);
+		User user = entityManager.find(User.class, id);
+		entityManager.close();
+		return user;
 	}
 
 	public void add(User user) {
