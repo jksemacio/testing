@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<h:panelGrid columns="1" cellpadding="5">
+		<p:commandButton value="Add" type="button" onclick="PF('add').show();" />
+	</h:panelGrid>
+	<p:dialog header="Add Form" widgetVar="add" modal="true" height="200">
+		<h:form>
+			<p:panel id="panel" header="New User">
+				<p:outputLabel for="email" value="Email:" />
+				<p:inputText id="email" value="#{userView.user.email}"
+					required="true" label="Email" />
+				<br />
+				<p:outputLabel for="password" value="Password:" />
+				<p:inputText id="password" value="#{userView.user.password}"
+					label="Password" required="true" />
+				<p:commandButton value="Add" update="userlist:userdt" oncomplete="PF('add').hide();"
+					actionListener="#{userView.add}" icon="ui-icon-check" />
+			</p:panel>
+		</h:form>
+	</p:dialog>
+	<h:form id="userlist">
+		<p:dataTable id="userdt" var="user" value="#{userView.users}" dynamic="true">
+			<p:column headerText="Id">
+				<h:outputText value="#{user.id}" />
+			</p:column>
+			<p:column headerText="Email">
+				<h:outputText value="#{user.email}" />
+			</p:column>
+			<p:column headerText="Edit">
+			</p:column>
+			<p:column headerText="Delete">
+			</p:column>
+		</p:dataTable>
+	</h:form>
+</body>
+</html>

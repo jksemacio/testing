@@ -2,25 +2,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"> 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      > 
 
 <h:head></h:head> 
 <body> 
- 	<h:form id="form" enctype="multipart/form-data">
- 		<h:panelGroup>
-  			<h:outputLabel for="id" value="Id"/>
-  			<h:inputText id="id" value="#{testing.user.id}" required="true" requiredMessage="Id is required"/>
-  			<h:message for="id" style="color:red"/>  			
-  		</h:panelGroup>
-  		<br/>
-  		<h:panelGroup>
-  			<h:outputText value="#{testing.user.email}" />
-  			<br/>
-  			<h:outputText value="#{testing.user.password}" />
-  		</h:panelGroup>
-  		<br/>
-  		<h:commandLink id="search" value="Search" action="#{testing.search}"/>
-  		<h:link id="cancel" value="Cancel" outcome="index"/>
-  	</h:form>
+	<h:form>
+		<h:commandButton action = "add" value = "Add" />
+		<h:commandButton action = "update" value = "Update" />
+		<h:commandButton action = "delete" value = "Delete" />
+		<h:commandButton action = "search" value = "Search" />
+		<h:commandButton action = "userview" value = "User Datatable" />
+		<h:commandButton action = "#{login.logout}" value = "Log out" />
+	</h:form>
+	
+	<p:dataTable var="u" value="#{userView.users}">
+	    <p:column headerText="Id">
+	        <h:outputText value="#{u.id}" />
+	    </p:column>
+	    <p:column headerText="Email">
+	        <h:outputText value="#{u.email}" />
+	    </p:column>
+	</p:dataTable>
+	
 </body> 
 </html>

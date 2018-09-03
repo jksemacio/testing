@@ -3,27 +3,23 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"> 
-      
-	<f:metadata>
-		<f:event type="preRenderView" listener="#{login.getPermission}"/>
-	</f:metadata>
 
 <h:head></h:head> 
 <body> 
  	<h:form id="form" enctype="multipart/form-data">
- 		<h:panelGroup>
-  			<h:outputLabel for="id" value="Id"/>
-  			<h:inputText id="id" value="#{testing.user.id}" required="true" requiredMessage="Id is required"/>
-  			<h:message for="id" style="color:red"/>  			
+  		<h:panelGroup>
+  			<h:outputLabel for="email" value="Email"/>
+  			<h:inputText id="email" value="#{login.user.email}" required="true" requiredMessage="Email is required"/>
+  			<h:message for="email" style="color:red"/>  			
   		</h:panelGroup>
   		<br/>
   		<h:panelGroup>
-  			<h:outputText value="#{testing.user.email}" />
-  			<br/>
-  			<h:outputText value="#{testing.user.password}" />
+  			<h:outputLabel for="password" value="Password"/>
+  			<h:inputSecret id="password" value="#{login.user.password}" required="true" requiredMessage="Password is required"/>  
+  			<h:message for="email" style="color:red"/>			
   		</h:panelGroup>
   		<br/>
-  		<h:commandLink id="search" value="Search" action="#{testing.search}"/>
+  		<h:commandLink id="login" value="Login" action="#{login.validate}"/>
   		<h:link id="cancel" value="Cancel" outcome="index"/>
   	</h:form>
 </body> 
