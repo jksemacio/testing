@@ -1,30 +1,72 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      > 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
-<h:head></h:head> 
-<body> 
-	<h:form>
-		<h:commandButton action = "add" value = "Add" />
-		<h:commandButton action = "update" value = "Update" />
-		<h:commandButton action = "delete" value = "Delete" />
-		<h:commandButton action = "search" value = "Search" />
-		<h:commandButton action = "userview" value = "User Datatable" />
-		<h:commandButton action = "#{login.logout}" value = "Log out" />
+<h:head></h:head>
+<body>
+	<p:dialog header="Add Form" widgetVar="add" modal="true">
+		<h:form>
+			<p:panel id="addpanel" header="New User">
+				<p:outputLabel for="email" value="Email:" />
+				<p:inputText id="email" value="#{userView.user.email}"
+					required="true" label="Email" />
+				<br />
+				<p:outputLabel for="password" value="Password:" />
+				<p:inputText id="password" value="#{userView.user.password}"
+					label="Password" required="true" />
+				<p:commandButton value="Add" update=":userlist:userdt"
+					oncomplete="PF('add').hide();" action="#{userView.add}" />
+			</p:panel>
+		</h:form>
+	</p:dialog>
+	<p:dialog header="Edit Form" widgetVar="edit" modal="true" height="300">
+		<h:form id="editform">
+				<p:panel id="editpanel" header="Update User">
+					<p:outputLabel for="email" value="Email:" />
+					<p:inputText id="email" value="#{userView.selectedUser.email}"
+						required="true" label="Email" />
+					<br />
+					<p:outputLabel for="password" value="Password:" />
+					<p:inputText id="password"
+						value="#{userView.selectedUser.password}" label="Password"
+						required="true" />
+					<p:commandButton value="Update" update=":userlist:userdt"
+						oncomplete="PF('edit').hide();" action="#{userView.update}" />
+				</p:panel>
+		</h:form>
+	</p:dialog>
+	<h:panelGrid>
+		<p:commandButton value="Add" onclick="PF('add').show();" />
+	</h:panelGrid>
+	<h:form id="userlist">
+		<p:dataTable id="userdt" var="user" value="#{userView.users}"
+			dynamic="true">
+			<p:column headerText="Id">
+				<h:outputText value="#{user.id}" />
+			</p:column>
+			<p:column headerText="Email">
+				<h:outputText value="#{user.email}" />
+			</p:column>
+			<p:column headerText="Edit">
+				<p:column headerText="Delete">
+					<p:commandButton value="Update" update=":editform:editpanel"
+						oncomplete="PF('edit').show();" >
+						<f:setPropertyActionListener value="#{user}"
+							target="#{userView.selectedUser}" />
+					</p:commandButton>
+				</p:column>
+			</p:column>
+			<p:column headerText="Delete">
+				<p:commandButton update=":userlist:userdt"
+					action="#{userView.delete}" value="Delete">
+					<f:setPropertyActionListener value="#{user}"
+						target="#{userView.selectedUser}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
 	</h:form>
-	
-	<p:dataTable var="u" value="#{userView.users}">
-	    <p:column headerText="Id">
-	        <h:outputText value="#{u.id}" />
-	    </p:column>
-	    <p:column headerText="Email">
-	        <h:outputText value="#{u.email}" />
-	    </p:column>
-	</p:dataTable>
-	
-</body> 
+</body>
 </html>

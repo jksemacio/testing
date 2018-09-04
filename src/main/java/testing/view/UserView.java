@@ -3,15 +3,16 @@ package testing.view;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Produces;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
 import testing.model.entity.User;
 import testing.service.IUserService;
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class UserView {
 	
 	@Inject
@@ -24,6 +25,7 @@ public class UserView {
 	@Inject
 	private IUserService userService;
 	
+	@Produces
 	@PostConstruct
 	public void init() {
 		users = userService.getUsers();
@@ -32,6 +34,16 @@ public class UserView {
 	public void add() {
 		userService.add(user);
 		users.add(user);
+		user = new User();
+	}
+	
+	public void update() {
+		userService.update(selectedUser);
+	}
+	
+	public void delete() {
+		userService.delete(selectedUser.getId());
+		users.remove(selectedUser);
 	}
 	
     public List<User> getUsers() {

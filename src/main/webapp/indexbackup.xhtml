@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      > 
+
+<h:head></h:head> 
+<body> 
+	<h:form>
+		<h:commandButton action = "add" value = "Add" />
+		<h:commandButton action = "update" value = "Update" />
+		<h:commandButton action = "delete" value = "Delete" />
+		<h:commandButton action = "search" value = "Search" />
+		<h:commandButton action = "userview" value = "User Datatable" />
+		<h:commandButton action = "#{login.logout}" value = "Log out" />
+	</h:form>
+	
+	<p:dataTable var="u" value="#{userView.users}">
+	    <p:column headerText="Id">
+	        <h:outputText value="#{u.id}" />
+	    </p:column>
+	    <p:column headerText="Email">
+	        <h:outputText value="#{u.email}" />
+	    </p:column>
+	</p:dataTable>
+	
+</body> 
+</html>

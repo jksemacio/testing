@@ -10,7 +10,7 @@
 	<h:panelGrid columns="1" cellpadding="5">
 		<p:commandButton value="Add" type="button" onclick="PF('add').show();" />
 	</h:panelGrid>
-	<p:dialog header="Add Form" widgetVar="add" modal="true" height="200">
+	<p:dialog header="Add Form" widgetVar="add" modal="true" height="300">
 		<h:form>
 			<p:panel id="panel" header="New User">
 				<p:outputLabel for="email" value="Email:" />
@@ -20,9 +20,28 @@
 				<p:outputLabel for="password" value="Password:" />
 				<p:inputText id="password" value="#{userView.user.password}"
 					label="Password" required="true" />
-				<p:commandButton value="Add" update="userlist:userdt" oncomplete="PF('add').hide();"
-					actionListener="#{userView.add}" icon="ui-icon-check" />
+				<p:commandButton value="Add" update=":userlist:userdt"
+					oncomplete="PF('add').hide();" actionListener="#{userView.add}"
+					icon="ui-icon-check" />
 			</p:panel>
+		</h:form>
+	</p:dialog>
+	<p:dialog header="Edit Form" widgetVar="edit" modal="true" height="300">
+		<h:form id="editform">
+		   	<p:outputPanel id="edituser" style="text-align:center;">
+			<p:panel id="panel" header="Update User">
+				<p:outputLabel for="email" value="Email:" />
+				<p:inputText id="email" value="#{userView.selectedUser.email}"
+					required="true" label="Email" />
+				<br />
+				<p:outputLabel for="password" value="Password:" />
+				<p:inputText id="password" value="#{userView.selectedUser.password}"
+					label="Password" required="true" />
+				<p:commandButton value="Update" update=":userlist:userdt"
+					oncomplete="PF('add').hide();" actionListener="#{userView.update}"
+					icon="ui-icon-check" />
+			</p:panel>
+			</p:outputPanel>
 		</h:form>
 	</p:dialog>
 	<h:form id="userlist">
@@ -34,8 +53,16 @@
 				<h:outputText value="#{user.email}" />
 			</p:column>
 			<p:column headerText="Edit">
+			<p:column headerText="Delete">
+             <p:commandButton update=":editform:edituser" oncomplete="PF('carDialog').show()" icon="ui-icon-search" title="Update">
+                <f:setPropertyActionListener value="#{user}" target="#{userView.selectedUser}" />
+            </p:commandButton>
+			</p:column>
 			</p:column>
 			<p:column headerText="Delete">
+				<p:commandButton update=":userlist:userdt" action="#{userView.delete}" value="Delete">
+                	<f:setPropertyActionListener value="#{user}" target="#{userView.selectedUser}" />
+            	</p:commandButton>
 			</p:column>
 		</p:dataTable>
 	</h:form>
