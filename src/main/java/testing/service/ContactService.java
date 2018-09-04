@@ -31,6 +31,10 @@ public class ContactService implements IContactService {
 		contact.setCountry(country);
 		entityManager.persist(contact);
 	}
+	
+	public Contact getById(int id) {
+		return entityManager.find(Contact.class, id);
+	}
 
 	public List<Contact> getContacts() {
 		TypedQuery<Contact> query = entityManager.createNamedQuery("FIND ALL Contact", Contact.class);
@@ -42,5 +46,15 @@ public class ContactService implements IContactService {
 		query.setParameter("id", userId);
 		return query.getSingleResult().getContacts();
 	}
-	
+
+	@Transactional
+	public void delete(int id) {
+		Contact contact = getById(id);
+		entityManager.remove(contact);
+	}
+
+	@Transactional
+	public void update(Contact contact) {
+		entityManager.merge(contact);
+	}
 }

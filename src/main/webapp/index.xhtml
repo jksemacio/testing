@@ -48,7 +48,7 @@
 			</p:panel>
 		</h:form>
 	</p:dialog>
-	<p:dialog header="Contact Form" widgetVar="contact" modal="true">
+	<p:dialog id="contact" header="Contact Form" widgetVar="contact" modal="true">
 		<h:form id="addcontactform">
 			<p:panel id="contactpanel" header="Add Contact">
 				<p:outputLabel for="contactName" value="Name:" />
@@ -65,14 +65,38 @@
 				</p:selectOneMenu>
 				<br />
 				<p:commandButton value="Add" update=":contactlist:contactdt"
-					oncomplete="PF('contact').hide();" action="#{userView.addcontact}" />
+					oncomplete="PF('contact').hide();" action="#{userView.addContact}" />
 			</p:panel>
 		</h:form>
 	</p:dialog>
-	<h:panelGrid>
+	<p:dialog header="Edit Contact Form" widgetVar="editcontact"
+		modal="true">
+		<h:form id="editcontactform">
+			<p:panel id="editcontactpanel" header="Update Contact">
+				<p:outputLabel for="contactName" value="Name:" />
+				<p:inputText id="contactName" value="#{userView.contact.name}"
+					required="true" label="Name" />
+				<p:outputLabel for="contactNumber" value="Number:" />
+				<p:inputText id="contactNumber" value="#{userView.contact.number}"
+					required="true" label="Number" />
+				<p:outputLabel for="countrySelectMenu" value="Country:" />
+				<p:selectOneMenu id="countrySelectMenu"
+					value="#{userView.country.id}">
+					<f:selectItem itemLabel="#{userView.contact.country.country}" itemValue="#{userView.contact.country.id}" />
+					<f:selectItems value="#{userView.countries}" var="country"
+						itemLabel="#{country.country}" itemValue="#{country.id}" />
+				</p:selectOneMenu>
+				<br />
+				<p:commandButton value="Update" update=":contactlist:contactdt"
+					oncomplete="PF('editcontact').hide();"
+					action="#{userView.updateContact}" />
+			</p:panel>
+		</h:form>
+	</p:dialog>
+	<p:panel>
 		<p:commandButton value="Add User" onclick="PF('add').show();" />
 		<p:commandButton value="Add Country" onclick="PF('country').show();" />
-	</h:panelGrid>
+	</p:panel>
 
 	<h:form id="userlist">
 		<p:dataTable id="userdt" var="user" value="#{userView.users}"
@@ -90,15 +114,6 @@
 			</p:column>
 			<p:column headerText="Email">
 				<h:outputText value="#{user.email}" />
-			</p:column>
-			<p:column headerText="Add Contact">
-				<p:column headerText="Add Contact">
-					<p:commandButton value="Add Contact" update=":editform:editpanel"
-						oncomplete="PF('contact').show();">
-						<f:setPropertyActionListener value="#{user}"
-							target="#{userView.selectedUser}" />
-					</p:commandButton>
-				</p:column>
 			</p:column>
 			<p:column headerText="Edit">
 				<p:column headerText="Delete">
@@ -118,6 +133,11 @@
 			</p:column>
 		</p:dataTable>
 	</h:form>
+	<h:form>
+		<p:commandButton id="addContactButton" value="Add Contact" update=":editform:editpanel"
+		action="#{userView.addContactButton}" >
+	</p:commandButton>
+	</h:form>
 	<h:form id="contactlist">
 		<p:dataTable id="contactdt" var="contact" value="#{userView.contacts}"
 			dynamic="true">
@@ -129,6 +149,22 @@
 			</p:column>
 			<p:column headerText="Country">
 				<h:outputText value="#{contact.country.country}" />
+			</p:column>
+			<p:column headerText="Edit">
+				<p:column headerText="Update">
+					<p:commandButton value="Update" update=":editcontactform"
+						oncomplete="PF('editcontact').show();">
+						<f:setPropertyActionListener value="#{contact}"
+							target="#{userView.contact}" />
+					</p:commandButton>
+				</p:column>
+			</p:column>
+			<p:column headerText="Delete">
+				<p:commandButton update=":contactlist:contactdt"
+					action="#{userView.deleteContact}" value="Delete">
+					<f:setPropertyActionListener value="#{contact}"
+						target="#{userView.contact}" />
+				</p:commandButton>
 			</p:column>
 		</p:dataTable>
 	</h:form>

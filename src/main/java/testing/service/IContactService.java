@@ -8,4 +8,6 @@ public interface IContactService {
 	void add(Contact contact, int userId, int countryId);
 	List<Contact> getContacts();
 	List<Contact> getContacts(int id);
+	void delete(int id);
+	void update(Contact contact);
 }

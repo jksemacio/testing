@@ -8,6 +8,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
+import org.primefaces.context.RequestContext;
+
 import testing.model.entity.Contact;
 import testing.model.entity.Country;
 import testing.model.entity.User;
@@ -18,78 +20,87 @@ import testing.service.IUserService;
 @ManagedBean
 @ViewScoped
 public class UserView {
-	
+
 	@Inject
 	private User user;
-	
+
 	@Inject
 	private Contact contact;
-	
+
 	@Inject
 	private Country country;
-	
+
 	private List<User> users;
-	
+
 	private List<Contact> contacts;
-	
+
 	private List<Country> countries;
-	
+
 	private User selectedUser;
-	
+
 	@Inject
 	private IUserService userService;
-	
+
 	@Inject
 	private IContactService contactService;
-	
+
 	@Inject
 	private ICountryService countryService;
-	
+
 	@PostConstruct
 	public void init() {
 		users = userService.getUsers();
 		countries = countryService.getCountries();
 		initContacts();
 	}
-	
+
 	public void initContacts() {
 		contacts = new ArrayList<Contact>();
 	}
-	
+
 	public void add() {
 		userService.add(user);
 		users.add(user);
 		user = new User();
 	}
-	
+
 	public void update() {
 		userService.update(selectedUser);
 	}
-	
+
 	public void delete() {
 		userService.delete(selectedUser.getId());
 		users.remove(selectedUser);
 	}
-	
-	public void addcontact() {
+
+	public void addContact() {
 		contactService.add(contact, selectedUser.getId(), country.getId());
 		contacts.add(contact);
 		contact = new Contact();
 	}
-	
+
+	public void deleteContact() {
+		contactService.delete(contact.getId());
+		contacts.remove(contact);
+	}
+
+	public void updateContact() {
+		contactService.update(contact);
+	}
+
 	public void addcountry() {
 		countryService.add(country);
 		countries.add(country);
 		country = new Country();
 	}
-	
+
 	public void initUserContacts() {
 		contacts = contactService.getContacts(selectedUser.getId());
 	}
-	
-    public List<User> getUsers() {
-        return users;
-    }
+
+	public List<User> getUsers() {
+		return users;
+	}
 
 	public User getSelectedUser() {
 		return selectedUser;
@@ -98,7 +109,7 @@ public class UserView {
 	public void setSelectedUser(User selectedUser) {
 		this.selectedUser = selectedUser;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
@@ -150,7 +161,11 @@ public class UserView {
 	public void setCountries(List<Country> countries) {
 		this.countries = countries;
 	}
-	
-	
-	
+
+	public void addContactButton() {
+		if (selectedUser != null) {
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("PF('contact').show();");
+		}
+	}
 }
