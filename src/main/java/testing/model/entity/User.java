@@ -3,9 +3,7 @@ package testing.model.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +16,8 @@ import javax.persistence.Table;
 @Table(name="testingUser")
 @NamedQueries({
 	@NamedQuery(query = "SELECT u FROM User u WHERE u.email = :email AND u.password = :password", name = "FIND User BY Email AND Password"),
-	@NamedQuery(query = "SELECT u FROM User u", name="FIND ALL User")
+	@NamedQuery(query = "SELECT u FROM User u", name="FIND ALL User"),
+	@NamedQuery(query = "SELECT u FROM User u LEFT JOIN FETCH u.contacts WHERE u.id = :id", name="GET Contacts")
 })
 public class User implements Serializable {
 
@@ -34,7 +33,7 @@ public class User implements Serializable {
 	private String email;
 	private String password;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
+	@OneToMany(mappedBy = "owner")
 	private List<Contact> contacts;
 	
 	public List<Contact> getContacts() {

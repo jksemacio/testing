@@ -38,8 +38,9 @@ public class ContactService implements IContactService {
 	}
 	
 	public List<Contact> getContacts(int userId) {
-		User owner = userService.getById(userId);
-		owner.getContacts().size();
-		return owner.getContacts();
+		TypedQuery<User> query = entityManager.createNamedQuery("GET Contacts", User.class);
+		query.setParameter("id", userId);
+		return query.getSingleResult().getContacts();
 	}
+	
 }

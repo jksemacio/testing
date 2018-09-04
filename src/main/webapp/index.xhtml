@@ -83,6 +83,8 @@
         </f:facet>
 			<p:ajax event="rowSelect" listener="#{userView.initUserContacts}"
 				update=":contactlist:contactdt" />
+			<p:ajax event="rowUnselect" listener="#{userView.initContacts}"
+				update=":contactlist:contactdt" />
 			<p:column headerText="Id">
 				<h:outputText value="#{user.id}" />
 			</p:column>
