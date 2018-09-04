@@ -22,38 +22,86 @@
 			</p:panel>
 		</h:form>
 	</p:dialog>
-	<p:dialog header="Edit Form" widgetVar="edit" modal="true" height="300">
+	<p:dialog header="Country Form" widgetVar="country" modal="true">
+		<h:form>
+			<p:panel id="countrypanel" header="New Country">
+				<p:outputLabel for="country" value="Country:" />
+				<p:inputText id="country" value="#{userView.country.country}"
+					required="true" label="Country" />
+				<p:commandButton value="Add" update=":addcontactform"
+					oncomplete="PF('country').hide();" action="#{userView.addcountry}" />
+			</p:panel>
+		</h:form>
+	</p:dialog>
+	<p:dialog header="Edit Form" widgetVar="edit" modal="true">
 		<h:form id="editform">
-				<p:panel id="editpanel" header="Update User">
-					<p:outputLabel for="email" value="Email:" />
-					<p:inputText id="email" value="#{userView.selectedUser.email}"
-						required="true" label="Email" />
-					<br />
-					<p:outputLabel for="password" value="Password:" />
-					<p:inputText id="password"
-						value="#{userView.selectedUser.password}" label="Password"
-						required="true" />
-					<p:commandButton value="Update" update=":userlist:userdt"
-						oncomplete="PF('edit').hide();" action="#{userView.update}" />
-				</p:panel>
+			<p:panel id="editpanel" header="Update User">
+				<p:outputLabel for="email" value="Email:" />
+				<p:inputText id="email" value="#{userView.selectedUser.email}"
+					required="true" label="Email" />
+				<br />
+				<p:outputLabel for="password" value="Password:" />
+				<p:inputText id="password" value="#{userView.selectedUser.password}"
+					label="Password" required="true" />
+				<p:commandButton value="Update" update=":userlist:userdt"
+					oncomplete="PF('edit').hide();" action="#{userView.update}" />
+			</p:panel>
+		</h:form>
+	</p:dialog>
+	<p:dialog header="Contact Form" widgetVar="contact" modal="true">
+		<h:form id="addcontactform">
+			<p:panel id="contactpanel" header="Add Contact">
+				<p:outputLabel for="contactName" value="Name:" />
+				<p:inputText id="contactName" value="#{userView.contact.name}"
+					required="true" label="Name" />
+				<p:outputLabel for="contactNumber" value="Number:" />
+				<p:inputText id="contactNumber" value="#{userView.contact.number}"
+					required="true" label="Number" />
+				<p:outputLabel for="countrySelectMenu" value="Country:" />
+				<p:selectOneMenu id="countrySelectMenu"
+					value="#{userView.country.id}">
+					<f:selectItems value="#{userView.countries}" var="country"
+						itemLabel="#{country.country}" itemValue="#{country.id}" />
+				</p:selectOneMenu>
+				<br />
+				<p:commandButton value="Add" update=":contactlist:contactdt"
+					oncomplete="PF('contact').hide();" action="#{userView.addcontact}" />
+			</p:panel>
 		</h:form>
 	</p:dialog>
 	<h:panelGrid>
-		<p:commandButton value="Add" onclick="PF('add').show();" />
+		<p:commandButton value="Add User" onclick="PF('add').show();" />
+		<p:commandButton value="Add Country" onclick="PF('country').show();" />
 	</h:panelGrid>
+
 	<h:form id="userlist">
 		<p:dataTable id="userdt" var="user" value="#{userView.users}"
-			dynamic="true">
+			selectionMode="single" selection="#{userView.selectedUser}"
+			rowKey="#{user.id}" dynamic="true">
+			<f:facet name="header">
+            Select User
+        </f:facet>
+			<p:ajax event="rowSelect" listener="#{userView.initUserContacts}"
+				update=":contactlist:contactdt" />
 			<p:column headerText="Id">
 				<h:outputText value="#{user.id}" />
 			</p:column>
 			<p:column headerText="Email">
 				<h:outputText value="#{user.email}" />
 			</p:column>
+			<p:column headerText="Add Contact">
+				<p:column headerText="Add Contact">
+					<p:commandButton value="Add Contact" update=":editform:editpanel"
+						oncomplete="PF('contact').show();">
+						<f:setPropertyActionListener value="#{user}"
+							target="#{userView.selectedUser}" />
+					</p:commandButton>
+				</p:column>
+			</p:column>
 			<p:column headerText="Edit">
 				<p:column headerText="Delete">
 					<p:commandButton value="Update" update=":editform:editpanel"
-						oncomplete="PF('edit').show();" >
+						oncomplete="PF('edit').show();">
 						<f:setPropertyActionListener value="#{user}"
 							target="#{userView.selectedUser}" />
 					</p:commandButton>
@@ -68,5 +116,20 @@
 			</p:column>
 		</p:dataTable>
 	</h:form>
+	<h:form id="contactlist">
+		<p:dataTable id="contactdt" var="contact" value="#{userView.contacts}"
+			dynamic="true">
+			<p:column headerText="Name">
+				<h:outputText value="#{contact.name}" />
+			</p:column>
+			<p:column headerText="Number">
+				<h:outputText value="#{contact.number}" />
+			</p:column>
+			<p:column headerText="Country">
+				<h:outputText value="#{contact.country.country}" />
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
 </body>
 </html>
