@@ -8,7 +8,7 @@
 <h:head></h:head>
 <body>
 	<p:dialog header="Add Form" widgetVar="add" modal="true">
-		<h:form>
+		<h:form id="addform">
 			<p:panel id="addpanel" header="New User">
 				<p:outputLabel for="email" value="Email:" />
 				<p:inputText id="email" value="#{userView.user.email}"
@@ -22,14 +22,16 @@
 			</p:panel>
 		</h:form>
 	</p:dialog>
-	<p:dialog header="Country Form" widgetVar="country" modal="true">
+	<p:dialog id="addCountry" header="Country Form" widgetVar="addCountry"
+		modal="true">
 		<h:form>
 			<p:panel id="countrypanel" header="New Country">
 				<p:outputLabel for="country" value="Country:" />
 				<p:inputText id="country" value="#{userView.country.country}"
 					required="true" label="Country" />
 				<p:commandButton value="Add" update=":addcontactform"
-					oncomplete="PF('country').hide();" action="#{userView.addcountry}" />
+					oncomplete="PF('addCountry').hide();"
+					action="#{userView.addcountry}" />
 			</p:panel>
 		</h:form>
 	</p:dialog>
@@ -48,7 +50,8 @@
 			</p:panel>
 		</h:form>
 	</p:dialog>
-	<p:dialog id="contact" header="Contact Form" widgetVar="contact" modal="true">
+	<p:dialog id="contact" header="Contact Form" widgetVar="contact"
+		modal="true">
 		<h:form id="addcontactform">
 			<p:panel id="contactpanel" header="Add Contact">
 				<p:outputLabel for="contactName" value="Name:" />
@@ -82,7 +85,8 @@
 				<p:outputLabel for="countrySelectMenu" value="Country:" />
 				<p:selectOneMenu id="countrySelectMenu"
 					value="#{userView.country.id}">
-					<f:selectItem itemLabel="#{userView.contact.country.country}" itemValue="#{userView.contact.country.id}" />
+					<f:selectItem itemLabel="#{userView.contact.country.country}"
+						itemValue="#{userView.contact.country.id}" />
 					<f:selectItems value="#{userView.countries}" var="country"
 						itemLabel="#{country.country}" itemValue="#{country.id}" />
 				</p:selectOneMenu>
@@ -94,14 +98,25 @@
 		</h:form>
 	</p:dialog>
 	<p:panel>
-		<p:commandButton value="Add User" onclick="PF('add').show();" />
-		<p:commandButton value="Add Country" onclick="PF('country').show();" />
+		<h:form>
+        <p:themeSwitcher>
+            <f:selectItems value="#{themeService.themes}" var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme.name}"/>
+            <p:ajax listener="#{themeService.theme(theme)}" />
+        </p:themeSwitcher>
+			<p:commandButton value="Add User" action="#{userView.addButton}"
+				update=":addform" />
+			<p:commandButton value="Add Country"
+				action="#{userView.addCountryButton}" update=":addCountry" />
+			<p:commandButton id="addContactButton" value="Add Contact"
+				update=":editform:editpanel" action="#{userView.addContactButton}" />
+		</h:form>
 	</p:panel>
 
 	<h:form id="userlist">
 		<p:dataTable id="userdt" var="user" value="#{userView.users}"
 			selectionMode="single" selection="#{userView.selectedUser}"
-			rowKey="#{user.id}" dynamic="true">
+			rowKey="#{user.id}" paginator="true" rows="10"
+			tableStyle="table-layout: auto" dynamic="true">
 			<f:facet name="header">
             Select User
         </f:facet>
@@ -115,16 +130,15 @@
 			<p:column headerText="Email">
 				<h:outputText value="#{user.email}" />
 			</p:column>
-			<p:column headerText="Edit">
-				<p:column headerText="Delete">
-					<p:commandButton value="Update" update=":editform:editpanel"
-						oncomplete="PF('edit').show();">
-						<f:setPropertyActionListener value="#{user}"
-							target="#{userView.selectedUser}" />
-					</p:commandButton>
-				</p:column>
+			<p:column headerText="Edit" style="max-width: 5px" exportable="false">
+				<p:commandButton value="Update" update=":editform:editpanel"
+					oncomplete="PF('edit').show();">
+					<f:setPropertyActionListener value="#{user}"
+						target="#{userView.selectedUser}" />
+				</p:commandButton>
 			</p:column>
-			<p:column headerText="Delete">
+			<p:column headerText="Delete" style="max-width: 5px"
+				exportable="false">
 				<p:commandButton update=":userlist:userdt"
 					action="#{userView.delete}" value="Delete">
 					<f:setPropertyActionListener value="#{user}"
@@ -132,14 +146,14 @@
 				</p:commandButton>
 			</p:column>
 		</p:dataTable>
-	</h:form>
-	<h:form>
-		<p:commandButton id="addContactButton" value="Add Contact" update=":editform:editpanel"
-		action="#{userView.addContactButton}" >
-	</p:commandButton>
+		<p:commandButton value="Export" ajax="false">
+			<p:dataExporter type="xls" target="userdt" fileName="users"
+				pageOnly="true" />
+		</p:commandButton>
 	</h:form>
 	<h:form id="contactlist">
 		<p:dataTable id="contactdt" var="contact" value="#{userView.contacts}"
+			paginator="true" rows="10" tableStyle="table-layout: auto"
 			dynamic="true">
 			<p:column headerText="Name">
 				<h:outputText value="#{contact.name}" />
@@ -150,16 +164,15 @@
 			<p:column headerText="Country">
 				<h:outputText value="#{contact.country.country}" />
 			</p:column>
-			<p:column headerText="Edit">
-				<p:column headerText="Update">
-					<p:commandButton value="Update" update=":editcontactform"
-						oncomplete="PF('editcontact').show();">
-						<f:setPropertyActionListener value="#{contact}"
-							target="#{userView.contact}" />
-					</p:commandButton>
-				</p:column>
+			<p:column headerText="Edit" style="max-width: 5px" exportable="false">
+				<p:commandButton value="Update" update=":editcontactform"
+					oncomplete="PF('editcontact').show();">
+					<f:setPropertyActionListener value="#{contact}"
+						target="#{userView.contact}" />
+				</p:commandButton>
 			</p:column>
-			<p:column headerText="Delete">
+			<p:column headerText="Delete" style="max-width: 5px"
+				exportable="false">
 				<p:commandButton update=":contactlist:contactdt"
 					action="#{userView.deleteContact}" value="Delete">
 					<f:setPropertyActionListener value="#{contact}"
@@ -167,7 +180,17 @@
 				</p:commandButton>
 			</p:column>
 		</p:dataTable>
+		<p:commandButton value="Export" ajax="false">
+			<p:dataExporter type="xls" target="contactdt" fileName="contacts"
+				pageOnly="true" />
+		</p:commandButton>
 	</h:form>
+	<br />
+	<h:form>
+	<p:commandButton value="Download" ajax="false" icon="ui-icon-arrowthick-1-s">
+	<p:fileDownload value="#{userView.file}" />
+</p:commandButton>
+</h:form>
 
 </body>
 </html>

@@ -1,5 +1,8 @@
 package testing.view;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +12,8 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import testing.model.entity.Contact;
 import testing.model.entity.Country;
@@ -16,6 +21,7 @@ import testing.model.entity.User;
 import testing.service.IContactService;
 import testing.service.ICountryService;
 import testing.service.IUserService;
+import testing.service.ReportService;
 
 @ManagedBean
 @ViewScoped
@@ -46,9 +52,12 @@ public class UserView {
 
 	@Inject
 	private ICountryService countryService;
+	
+	@Inject
+	private ReportService reportService;
 
 	@PostConstruct
-	public void init() {
+	public void init() throws SQLException {
 		users = userService.getUsers();
 		countries = countryService.getCountries();
 		initContacts();
@@ -167,5 +176,22 @@ public class UserView {
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('contact').show();");
 		}
+	}
+	
+	public void addButton() {
+		user = new User();
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('add').show();");
+	}
+	
+	public void addCountryButton() {
+		country = new Country();
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('addCountry').show();");
+	}
+
+	public StreamedContent getFile() throws IOException {
+		InputStream stream = reportService.getReport(selectedUser, contacts);
+		return new DefaultStreamedContent(stream, "xls", "Users.xls"); 
 	}
 }
