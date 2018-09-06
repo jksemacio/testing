@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name="testingCountry")
@@ -46,6 +48,7 @@ public class Country implements Serializable {
 		return contacts;
 	}
 
+	@XmlTransient
 	public void setContacts(List<Contact> contacts) {
 		this.contacts = contacts;
 	}

@@ -47,18 +47,22 @@ public class Contact implements Serializable {
 	public Country getCountry() {
 		return country;
 	}
+	
 	public void setCountry(Country country) {
 		this.country = country;
 	}
+	
 	public String getName() {
 		return name;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
 	public String getNumber() {
 		return number;
 	}
+	
 	public void setNumber(String number) {
 		this.number = number;
 	}	

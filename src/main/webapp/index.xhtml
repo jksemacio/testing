@@ -99,10 +99,11 @@
 	</p:dialog>
 	<p:panel>
 		<h:form>
-        <p:themeSwitcher>
-            <f:selectItems value="#{themeService.themes}" var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme.name}"/>
-            <p:ajax listener="#{themeService.theme(theme)}" />
-        </p:themeSwitcher>
+			<p:themeSwitcher>
+				<f:selectItems value="#{themeService.themes}" var="theme"
+					itemLabel="#{theme.displayName}" itemValue="#{theme.name}" />
+				<p:ajax listener="#{themeService.theme(theme)}" />
+			</p:themeSwitcher>
 			<p:commandButton value="Add User" action="#{userView.addButton}"
 				update=":addform" />
 			<p:commandButton value="Add Country"
@@ -187,10 +188,19 @@
 	</h:form>
 	<br />
 	<h:form>
-	<p:commandButton value="Download" ajax="false" icon="ui-icon-arrowthick-1-s">
-	<p:fileDownload value="#{userView.file}" />
-</p:commandButton>
-</h:form>
+		<p:commandButton value="Download" ajax="false"
+			icon="ui-icon-arrowthick-1-s">
+			<p:fileDownload value="#{userView.file}" />
+		</p:commandButton>
+		<p:commandButton value="Download XML" ajax="false"
+			icon="ui-icon-arrowthick-1-s">
+			<p:fileDownload value="#{userView.reportXML}" />
+		</p:commandButton>
+		<p:commandButton value="Download PDF" ajax="false"
+			icon="ui-icon-arrowthick-1-s">
+			<p:fileDownload value="#{userView.reportPDF}" />
+		</p:commandButton>
+	</h:form>
 
 </body>
 </html>

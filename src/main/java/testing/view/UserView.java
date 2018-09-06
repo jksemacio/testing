@@ -10,10 +10,15 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
+import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import org.xml.sax.SAXException;
 
 import testing.model.entity.Contact;
 import testing.model.entity.Country;
@@ -192,6 +197,16 @@ public class UserView {
 
 	public StreamedContent getFile() throws IOException {
 		InputStream stream = reportService.getReport(selectedUser, contacts);
-		return new DefaultStreamedContent(stream, "xls", "Users.xls"); 
+		return new DefaultStreamedContent(stream, "xls", "userContacts.xls"); 
+	}
+	
+	public StreamedContent getReportXML() throws IOException, JAXBException, ParserConfigurationException, TransformerException {
+		InputStream stream = reportService.getReportXML(selectedUser, contacts);
+		return new DefaultStreamedContent(stream, "xml", "userContacts.xml"); 
+	}
+	
+	public StreamedContent getReportPDF() throws ConfigurationException, SAXException, IOException, TransformerException, ParserConfigurationException {
+		InputStream stream = reportService.getReportPDF(selectedUser, contacts);
+		return new DefaultStreamedContent(stream, "pdf", "userContacts.pdf");
 	}
 }

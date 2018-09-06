@@ -3,7 +3,9 @@ package testing.model.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +13,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name="testingUser")
@@ -19,6 +24,7 @@ import javax.persistence.Table;
 	@NamedQuery(query = "SELECT u FROM User u", name="FIND ALL User"),
 	@NamedQuery(query = "SELECT u FROM User u LEFT JOIN FETCH u.contacts WHERE u.id = :id", name="GET Contacts")
 })
+@XmlRootElement  
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -36,10 +42,12 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "owner")
 	private List<Contact> contacts;
 	
+	
 	public List<Contact> getContacts() {
 		return contacts;
 	}
 
+	@XmlElement
 	public void setContacts(List<Contact> contacts) {
 		this.contacts = contacts;
 	}
@@ -49,22 +57,31 @@ public class User implements Serializable {
 		this.email = email;
 		this.password = password;
 	}
-
+	
+	
 	public int getId() {
 		return id;
 	}
+	
+	@XmlAttribute
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	
 	public String getEmail() {
 		return email;
 	}
+	
+	@XmlElement
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
 	public String getPassword() {
 		return password;
 	}
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}
