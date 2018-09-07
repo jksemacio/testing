@@ -61,10 +61,8 @@
 				<p:inputText id="contactNumber" value="#{userView.contact.number}"
 					required="true" label="Number" />
 				<p:outputLabel for="countrySelectMenu" value="Country:" />
-				<p:selectOneMenu id="countrySelectMenu"
-					value="#{userView.country.id}">
-					<f:selectItems value="#{userView.countries}" var="country"
-						itemLabel="#{country.country}" itemValue="#{country.id}" />
+				<p:selectOneMenu id="countrySelectMenu" value="#{userView.country.id}">
+					<f:selectItems value="#{userView.countries}" var="country" itemLabel="#{country.country}" itemValue="#{country.id}" />
 				</p:selectOneMenu>
 				<br />
 				<p:commandButton value="Add" update=":contactlist:contactdt"
@@ -188,7 +186,7 @@
 	</h:form>
 	<br />
 	<h:form>
-		<p:commandButton value="Download" ajax="false"
+		<p:commandButton value="Download XLS" ajax="false"
 			icon="ui-icon-arrowthick-1-s">
 			<p:fileDownload value="#{userView.file}" />
 		</p:commandButton>
@@ -199,6 +197,10 @@
 		<p:commandButton value="Download PDF" ajax="false"
 			icon="ui-icon-arrowthick-1-s">
 			<p:fileDownload value="#{userView.reportPDF}" />
+		</p:commandButton>
+		<p:commandButton value="Download PDF From Jasper Report" ajax="false"
+			icon="ui-icon-arrowthick-1-s">
+			<p:fileDownload value="#{userView.reportJasper}" />
 		</p:commandButton>
 	</h:form>
 

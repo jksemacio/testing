@@ -1,5 +1,6 @@
 package testing.view;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.xml.sax.SAXException;
 
+import net.sf.jasperreports.engine.JRException;
 import testing.model.entity.Contact;
 import testing.model.entity.Country;
 import testing.model.entity.User;
@@ -196,17 +198,34 @@ public class UserView {
 	}
 
 	public StreamedContent getFile() throws IOException {
-		InputStream stream = reportService.getReport(selectedUser, contacts);
-		return new DefaultStreamedContent(stream, "xls", "userContacts.xls"); 
+		if(selectedUser != null) {
+			InputStream stream = reportService.getReport(selectedUser, contacts);
+			return new DefaultStreamedContent(stream, "xls", "userContacts.xls");
+		}
+		return null;
 	}
 	
 	public StreamedContent getReportXML() throws IOException, JAXBException, ParserConfigurationException, TransformerException {
-		InputStream stream = reportService.getReportXML(selectedUser, contacts);
-		return new DefaultStreamedContent(stream, "xml", "userContacts.xml"); 
+		if(selectedUser != null) {
+			InputStream stream = reportService.getReportXML(selectedUser, contacts);
+			return new DefaultStreamedContent(stream, "xml", "userContacts.xml"); 
+		}
+		return null;
 	}
 	
 	public StreamedContent getReportPDF() throws ConfigurationException, SAXException, IOException, TransformerException, ParserConfigurationException {
-		InputStream stream = reportService.getReportPDF(selectedUser, contacts);
-		return new DefaultStreamedContent(stream, "pdf", "userContacts.pdf");
+		if(selectedUser != null) {
+			InputStream stream = reportService.getReportPDF(selectedUser, contacts);
+			return new DefaultStreamedContent(stream, "pdf", "userContacts.pdf");
+		}
+		return null;
+	}
+	
+	public StreamedContent getReportJasper() throws JRException, FileNotFoundException, TransformerException, ParserConfigurationException {
+		if(selectedUser != null) {
+			InputStream stream = reportService.getReportJasper(selectedUser, contacts);
+			return new DefaultStreamedContent(stream, "pdf", "Contacts.pdf");
+		}
+		return null;
 	}
 }

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jasper_report_template" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="50" bottomMargin="50" uuid="bc9d9d2a-c8a8-47b4-9a2c-aba8b0a3054e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="Contacts" uuid="1c83962d-8357-46b5-94c4-01ff7178a8e9">
+		<queryString language="SQL">
+			<![CDATA[SELECT
+     testingcontact."name" AS testingcontact_name,
+     testingcontact."number" AS testingcontact_number,
+FROM
+     "public"."testingcontact" testingcontact]]>
+		</queryString>
+		<field name="testingcontact_name" class="java.lang.String"/>
+		<field name="testingcontact_number" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="ReportTitle" class="java.lang.String"/>
+	<parameter name="Author" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="number" class="java.lang.String">
+		<fieldDescription><![CDATA[number]]></fieldDescription>
+	</field>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[name]]></fieldDescription>
+	</field>
+	<sortField name="name"/>
+	<variable name="CountryNumber" class="java.lang.Integer" incrementType="Group" incrementGroup="CountryGroup" calculation="Count">
+		<variableExpression><![CDATA[Boolean.TRUE]]></variableExpression>
+	</variable>
+	<group name="CountryGroup" minHeightToStartNewPage="60">
+		<groupExpression><![CDATA[$F{number}]]></groupExpression>
+		<groupHeader>
+			<band height="20" splitType="Stretch">
+				<textField evaluationTime="Group" evaluationGroup="CountryGroup" bookmarkLevel="1">
+					<reportElement mode="Opaque" x="0" y="5" width="515" height="15" backcolor="#C0C0C0" uuid="b1939949-f301-4f0c-bfb4-88b19580f4cb"/>
+					<box leftPadding="10">
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textFieldExpression><![CDATA["  " + String.valueOf($V{CountryNumber}) + ". "
+                  + String.valueOf($F{number})]]></textFieldExpression>
+					<anchorNameExpression><![CDATA[String.valueOf($F{number})]]></anchorNameExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20" splitType="Stretch">
+				<staticText>
+					<reportElement x="400" y="1" width="60" height="15" uuid="5850b443-8b0b-4a96-8c39-af84cb8c73c3"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Count :]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="460" y="1" width="30" height="15" uuid="fc80f22b-cfca-41b0-833a-27c583868d24"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$V{CountryGroup_COUNT}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<title>
+		<band height="70" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="515" height="1" uuid="2339c13a-421e-46b3-b88a-b4f3b3ffe952"/>
+			</line>
+			<textField isBlankWhenNull="true" bookmarkLevel="1">
+				<reportElement x="0" y="10" width="515" height="30" uuid="b273c197-6702-4682-af24-662c24cf0d1d"/>
+				<textElement textAlignment="Center">
+					<font size="22"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ReportTitle}]]></textFieldExpression>
+				<anchorNameExpression><![CDATA["Title"]]></anchorNameExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="40" width="515" height="20" uuid="f494da76-a5fe-4198-9e1e-27c989026fc8"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Author}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="3" width="535" height="15" backcolor="#70A9A9" uuid="e1d04a92-ce78-4c14-ae38-21dfcffe901b"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<text><![CDATA[
+
+            ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="414" y="3" width="121" height="15" uuid="84ef429d-939e-4a5d-9f2f-a00cdfbc7673"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Country]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="3" width="136" height="15" uuid="f3671c95-41a8-4dc4-b16b-395e8c33f39e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="535" height="14" backcolor="#E5ECF9" uuid="82838ef1-021e-4dcf-839e-f3c86eed13c9"/>
+				<box>
+					<bottomPen lineWidth="0.25" lineColor="#CCCCCC"/>
+				</box>
+				<text><![CDATA[
+
+            ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="414" y="0" width="121" height="15" uuid="875784fe-13be-449e-bb7f-7385656dc1a4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="136" height="15" uuid="0bd082ac-a0aa-4372-a18d-bfeec5eb3826"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

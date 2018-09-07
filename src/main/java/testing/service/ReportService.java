@@ -8,8 +8,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,6 +40,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import testing.model.entity.Contact;
 import testing.model.entity.User;
 
@@ -47,57 +53,25 @@ public class ReportService implements Serializable {
 	
 	private XSSFWorkbook workbook;
 	
+	public FileInputStream getReportJasper(User user, List<Contact> contacts) throws JRException, FileNotFoundException {
+		Map parameters = new HashMap();
+	    parameters.put("ReportTitle", "List of Contacts");
+	    System.out.println(user.getId());
+	    System.out.println(user.getEmail());
+	    parameters.put("id", Integer.toString(user.getId()));
+	    parameters.put("email", user.getEmail());
+		ClassLoader classLoader = getClass().getClassLoader();
+		String jasperFile = new File(classLoader.getResource("Contacts.jasper").getFile()).getPath();
+		String jrprintFile = JasperFillManager.fillReportToFile(jasperFile, parameters, new JRBeanCollectionDataSource(contacts));
+		JasperExportManager.exportReportToPdfFile(jrprintFile, "Contacts.pdf");
+		
+	    File sampleJasperFile = new File("Contacts.pdf");
+		FileInputStream in = new FileInputStream(sampleJasperFile);
+		return in;
+	}
+	
 	public FileInputStream getReportPDF(User user, List<Contact> contacts) throws ConfigurationException, SAXException, IOException, TransformerException, ParserConfigurationException {
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		Document doc = dBuilder.newDocument();
-        
-		Element rootElement = doc.createElement("User");
-		doc.appendChild(rootElement);
-		
-		Attr userAttr = doc.createAttribute("id");
-	    userAttr.setValue(Integer.toString(user.getId()));
-	    rootElement.setAttributeNode(userAttr);
-		
-		Element userElement = doc.createElement("Email");
-		userElement.appendChild(doc.createTextNode(user.getEmail()));
-		rootElement.appendChild(userElement);
-        
-        Element contactsElement = doc.createElement("Contacts");
-        rootElement.appendChild(contactsElement);
-        
-        Iterator<Contact> contactsIterator = contacts.iterator();
-        
-        while(contactsIterator.hasNext()) {
-        	Contact contact = contactsIterator.next();
-        	Element contactElement = doc.createElement("Contact");
-            contactsElement.appendChild(contactElement);
-            
-            Attr contactAttr = doc.createAttribute("id");
-            contactAttr.setValue(Integer.toString(contact.getId()));
-            contactElement.setAttributeNode(contactAttr);
-            
-            Element contactName = doc.createElement("Name");
-    		contactName.appendChild(doc.createTextNode(contact.getName()));
-            contactElement.appendChild(contactName);
-            
-            Element contactNumber = doc.createElement("Number");
-            contactNumber.appendChild(doc.createTextNode(contact.getNumber()));
-            contactElement.appendChild(contactNumber);
-            
-            Element contactCountry = doc.createElement("Country");
-            contactCountry.appendChild(doc.createTextNode(contact.getCountry().getCountry()));
-            contactElement.appendChild(contactCountry);    
-        }
-        
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File("userContacts.xml"));
-        transformer.transform(source, result);
-       
-		File xmlFile = new File("userContacts.xml");
-		
+		File xmlFile = getReportXMLFile(user, contacts);
 		ClassLoader classLoader = getClass().getClassLoader();
 		File xsltfile = new File(classLoader.getResource("userContacts.xsl").getFile());
 		StreamSource sourceStream = new StreamSource(xmlFile);
@@ -145,6 +119,88 @@ public class ReportService implements Serializable {
 	}
 	
 	public FileInputStream getReportXML(User user, List<Contact> contacts) throws ParserConfigurationException, TransformerException, FileNotFoundException {
+		File userContactsFile = getReportXMLFile(user, contacts);
+		FileInputStream in = new FileInputStream(userContactsFile);
+		return in;
+	}
+	
+	public FileInputStream getReport(User user, List<Contact> contacts) throws IOException { 
+		workbook = new XSSFWorkbook();
+		XSSFSheet spreadsheet = workbook.createSheet("Users");
+		
+		XSSFRow row1 = spreadsheet.createRow(0);
+		
+		row1.createCell(0).setCellValue("User:");
+		row1.createCell(1).setCellValue(user.getId());
+		row1.createCell(2).setCellValue(user.getEmail());
+		
+		XSSFRow row = spreadsheet.createRow(2);
+		XSSFCell cell;
+		cell = row.createCell(1); cell.setCellValue("Contacts:");
+		cell = row.createCell(2); cell.setCellValue("Id");
+		cell = row.createCell(3); cell.setCellValue("Name");
+		cell = row.createCell(4); cell.setCellValue("Number");
+		cell = row.createCell(5); cell.setCellValue("Country");
+		
+		Iterator<Contact> contactsIterator = contacts.iterator();
+		int i = 3;
+		while(contactsIterator.hasNext()) {
+		   row = spreadsheet.createRow(i);
+		   Contact contact = contactsIterator.next();
+		   cell = row.createCell(2); cell.setCellValue(contact.getId());
+		   cell = row.createCell(3); cell.setCellValue(contact.getName());
+		   cell = row.createCell(4); cell.setCellValue(contact.getNumber());
+		   cell = row.createCell(5); cell.setCellValue(contact.getCountry().getCountry());
+		   i++;
+		}
+		File file = new File("userContacts.xlsx");
+		FileOutputStream out = new FileOutputStream(file);
+		workbook.write(out);
+		out.close();
+		
+		File usersFile = new File("userContacts.xlsx");
+		FileInputStream in = new FileInputStream(usersFile);
+		return in;
+	}
+	
+	public FileOutputStream getReportXLSX(User user, List<Contact> contacts) throws IOException { 
+		workbook = new XSSFWorkbook();
+		XSSFSheet spreadsheet = workbook.createSheet("Users");
+		
+		XSSFRow row1 = spreadsheet.createRow(0);
+		
+		row1.createCell(0).setCellValue("User:");
+		row1.createCell(1).setCellValue(user.getId());
+		row1.createCell(2).setCellValue(user.getEmail());
+		
+		XSSFRow row = spreadsheet.createRow(2);
+		XSSFCell cell;
+		cell = row.createCell(1); cell.setCellValue("Contacts:");
+		cell = row.createCell(2); cell.setCellValue("Id");
+		cell = row.createCell(3); cell.setCellValue("Name");
+		cell = row.createCell(4); cell.setCellValue("Number");
+		cell = row.createCell(5); cell.setCellValue("Country");
+		
+		Iterator<Contact> contactsIterator = contacts.iterator();
+		int i = 3;
+		while(contactsIterator.hasNext()) {
+		   row = spreadsheet.createRow(i);
+		   Contact contact = contactsIterator.next();
+		   cell = row.createCell(2); cell.setCellValue(contact.getId());
+		   cell = row.createCell(3); cell.setCellValue(contact.getName());
+		   cell = row.createCell(4); cell.setCellValue(contact.getNumber());
+		   cell = row.createCell(5); cell.setCellValue(contact.getCountry().getCountry());
+		   i++;
+		}
+		File file = new File("userContacts.xlsx");
+		FileOutputStream out = new FileOutputStream(file);
+		workbook.write(out);
+		out.close();
+		
+		return out;
+	}
+	
+	public File getReportXMLFile(User user, List<Contact> contacts) throws TransformerException, ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.newDocument();
@@ -193,47 +249,6 @@ public class ReportService implements Serializable {
         StreamResult result = new StreamResult(new File("userContacts.xml"));
         transformer.transform(source, result);
        
-		File userContactsFile = new File("userContacts.xml");
-		FileInputStream in = new FileInputStream(userContactsFile);
-		return in;
-	}
-	
-	public FileInputStream getReport(User user, List<Contact> contacts) throws IOException { 
-		workbook = new XSSFWorkbook();
-		XSSFSheet spreadsheet = workbook.createSheet("Users");
-		
-		XSSFRow row1 = spreadsheet.createRow(0);
-		
-		row1.createCell(0).setCellValue("User:");
-		row1.createCell(1).setCellValue(user.getId());
-		row1.createCell(2).setCellValue(user.getEmail());
-		
-		XSSFRow row = spreadsheet.createRow(2);
-		XSSFCell cell;
-		cell = row.createCell(1); cell.setCellValue("Contacts:");
-		cell = row.createCell(2); cell.setCellValue("Id");
-		cell = row.createCell(3); cell.setCellValue("Name");
-		cell = row.createCell(4); cell.setCellValue("Number");
-		cell = row.createCell(5); cell.setCellValue("Country");
-		
-		Iterator<Contact> contactsIterator = contacts.iterator();
-		int i = 3;
-		while(contactsIterator.hasNext()) {
-		   row = spreadsheet.createRow(i);
-		   Contact contact = contactsIterator.next();
-		   cell = row.createCell(2); cell.setCellValue(contact.getId());
-		   cell = row.createCell(3); cell.setCellValue(contact.getName());
-		   cell = row.createCell(4); cell.setCellValue(contact.getNumber());
-		   cell = row.createCell(5); cell.setCellValue(contact.getCountry().getCountry());
-		   i++;
-		}
-		File file = new File("userContacts.xlsx");
-		FileOutputStream out = new FileOutputStream(file);
-		workbook.write(out);
-		out.close();
-		
-		File usersFile = new File("userContacts.xlsx");
-		FileInputStream in = new FileInputStream(usersFile);
-		return in;
+		return new File("userContacts.xml");
 	}
 }

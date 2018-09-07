@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
@@ -56,5 +57,11 @@ public class ContactService implements IContactService {
 	@Transactional
 	public void update(Contact contact) {
 		entityManager.merge(contact);
+	}
+	
+	public List getContactsByOwner(int userId) {
+		Query query = entityManager.createQuery("SELECT c.name, c.number, d.country FROM Contact c, Country d WHERE c.userid = :userid");
+		query.setParameter("userid", userId);
+		return query.getResultList();
 	}
 }
