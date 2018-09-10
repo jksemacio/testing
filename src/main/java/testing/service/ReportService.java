@@ -43,7 +43,7 @@ import org.xml.sax.SAXException;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.data.JRXmlDataSource;
 import testing.model.entity.Contact;
 import testing.model.entity.User;
 
@@ -53,16 +53,14 @@ public class ReportService implements Serializable {
 	
 	private XSSFWorkbook workbook;
 	
-	public FileInputStream getReportJasper(User user, List<Contact> contacts) throws JRException, FileNotFoundException {
-		Map parameters = new HashMap();
+	public FileInputStream getReportJasper(User user, List<Contact> contacts) throws JRException, FileNotFoundException, ParserConfigurationException, TransformerException {
+		Map<String, Object> parameters = new HashMap<String, Object>();
 	    parameters.put("ReportTitle", "List of Contacts");
-	    System.out.println(user.getId());
-	    System.out.println(user.getEmail());
-	    parameters.put("id", Integer.toString(user.getId()));
+	    parameters.put("idNo", Integer.toString(user.getIdNo()));
 	    parameters.put("email", user.getEmail());
 		ClassLoader classLoader = getClass().getClassLoader();
 		String jasperFile = new File(classLoader.getResource("Contacts.jasper").getFile()).getPath();
-		String jrprintFile = JasperFillManager.fillReportToFile(jasperFile, parameters, new JRBeanCollectionDataSource(contacts));
+		String jrprintFile = JasperFillManager.fillReportToFile(jasperFile, parameters, new JRXmlDataSource(getReportXML(user,contacts)));
 		JasperExportManager.exportReportToPdfFile(jrprintFile, "Contacts.pdf");
 		
 	    File sampleJasperFile = new File("Contacts.pdf");
@@ -131,7 +129,7 @@ public class ReportService implements Serializable {
 		XSSFRow row1 = spreadsheet.createRow(0);
 		
 		row1.createCell(0).setCellValue("User:");
-		row1.createCell(1).setCellValue(user.getId());
+		row1.createCell(1).setCellValue(user.getIdNo());
 		row1.createCell(2).setCellValue(user.getEmail());
 		
 		XSSFRow row = spreadsheet.createRow(2);
@@ -147,7 +145,7 @@ public class ReportService implements Serializable {
 		while(contactsIterator.hasNext()) {
 		   row = spreadsheet.createRow(i);
 		   Contact contact = contactsIterator.next();
-		   cell = row.createCell(2); cell.setCellValue(contact.getId());
+		   cell = row.createCell(2); cell.setCellValue(contact.getIdNo());
 		   cell = row.createCell(3); cell.setCellValue(contact.getName());
 		   cell = row.createCell(4); cell.setCellValue(contact.getNumber());
 		   cell = row.createCell(5); cell.setCellValue(contact.getCountry().getCountry());
@@ -170,7 +168,7 @@ public class ReportService implements Serializable {
 		XSSFRow row1 = spreadsheet.createRow(0);
 		
 		row1.createCell(0).setCellValue("User:");
-		row1.createCell(1).setCellValue(user.getId());
+		row1.createCell(1).setCellValue(user.getIdNo());
 		row1.createCell(2).setCellValue(user.getEmail());
 		
 		XSSFRow row = spreadsheet.createRow(2);
@@ -186,7 +184,7 @@ public class ReportService implements Serializable {
 		while(contactsIterator.hasNext()) {
 		   row = spreadsheet.createRow(i);
 		   Contact contact = contactsIterator.next();
-		   cell = row.createCell(2); cell.setCellValue(contact.getId());
+		   cell = row.createCell(2); cell.setCellValue(contact.getIdNo());
 		   cell = row.createCell(3); cell.setCellValue(contact.getName());
 		   cell = row.createCell(4); cell.setCellValue(contact.getNumber());
 		   cell = row.createCell(5); cell.setCellValue(contact.getCountry().getCountry());
@@ -209,7 +207,7 @@ public class ReportService implements Serializable {
 		doc.appendChild(rootElement);
 		
 		Attr userAttr = doc.createAttribute("id");
-	    userAttr.setValue(Integer.toString(user.getId()));
+	    userAttr.setValue(Integer.toString(user.getIdNo()));
 	    rootElement.setAttributeNode(userAttr);
 		
 		Element userElement = doc.createElement("Email");
@@ -227,7 +225,7 @@ public class ReportService implements Serializable {
             contactsElement.appendChild(contactElement);
             
             Attr contactAttr = doc.createAttribute("id");
-            contactAttr.setValue(Integer.toString(contact.getId()));
+            contactAttr.setValue(Integer.toString(contact.getIdNo()));
             contactElement.setAttributeNode(contactAttr);
             
             Element contactName = doc.createElement("Name");

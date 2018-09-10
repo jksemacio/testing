@@ -19,8 +19,8 @@ public class Contact implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer idNo;
 	private String name;
 	private String number;
 	
@@ -32,11 +32,11 @@ public class Contact implements Serializable {
 	@JoinColumn(name="countryId")
 	private Country country;
 	
-	public int getId() {
-		return id;
+	public Integer getIdNo() {
+		return idNo;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setIdNo(Integer idNo) {
+		this.idNo = idNo;
 	}
 	public User getOwner() {
 		return owner;

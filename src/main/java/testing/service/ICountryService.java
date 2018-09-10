@@ -6,6 +6,6 @@ import testing.model.entity.Country;
 
 public interface ICountryService {
 	void add(Country country);
-	Country getById(int id);
+	Country getByIdNo(Integer idNo);
 	List<Country> getCountries();
 }

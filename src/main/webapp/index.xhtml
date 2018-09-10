@@ -61,8 +61,8 @@
 				<p:inputText id="contactNumber" value="#{userView.contact.number}"
 					required="true" label="Number" />
 				<p:outputLabel for="countrySelectMenu" value="Country:" />
-				<p:selectOneMenu id="countrySelectMenu" value="#{userView.country.id}">
-					<f:selectItems value="#{userView.countries}" var="country" itemLabel="#{country.country}" itemValue="#{country.id}" />
+				<p:selectOneMenu id="countrySelectMenu" value="#{userView.country.idNo}">
+					<f:selectItems value="#{userView.countries}" var="country" itemLabel="#{country.country}" itemValue="#{country.idNo}" />
 				</p:selectOneMenu>
 				<br />
 				<p:commandButton value="Add" update=":contactlist:contactdt"
@@ -82,11 +82,11 @@
 					required="true" label="Number" />
 				<p:outputLabel for="countrySelectMenu" value="Country:" />
 				<p:selectOneMenu id="countrySelectMenu"
-					value="#{userView.country.id}">
+					value="#{userView.country.idNo}">
 					<f:selectItem itemLabel="#{userView.contact.country.country}"
-						itemValue="#{userView.contact.country.id}" />
+						itemValue="#{userView.contact.country.idNo}" />
 					<f:selectItems value="#{userView.countries}" var="country"
-						itemLabel="#{country.country}" itemValue="#{country.id}" />
+						itemLabel="#{country.country}" itemValue="#{country.idNo}" />
 				</p:selectOneMenu>
 				<br />
 				<p:commandButton value="Update" update=":contactlist:contactdt"
@@ -114,7 +114,7 @@
 	<h:form id="userlist">
 		<p:dataTable id="userdt" var="user" value="#{userView.users}"
 			selectionMode="single" selection="#{userView.selectedUser}"
-			rowKey="#{user.id}" paginator="true" rows="10"
+			rowKey="#{user.idNo}" paginator="true" rows="10"
 			tableStyle="table-layout: auto" dynamic="true">
 			<f:facet name="header">
             Select User
@@ -124,7 +124,7 @@
 			<p:ajax event="rowUnselect" listener="#{userView.initContacts}"
 				update=":contactlist:contactdt" />
 			<p:column headerText="Id">
-				<h:outputText value="#{user.id}" />
+				<h:outputText value="#{user.idNo}" />
 			</p:column>
 			<p:column headerText="Email">
 				<h:outputText value="#{user.email}" />

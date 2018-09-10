@@ -11,18 +11,14 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name="testingUser")
 @NamedQueries({
 	@NamedQuery(query = "SELECT u FROM User u WHERE u.email = :email AND u.password = :password", name = "FIND User BY Email AND Password"),
 	@NamedQuery(query = "SELECT u FROM User u", name="FIND ALL User"),
-	@NamedQuery(query = "SELECT u FROM User u LEFT JOIN FETCH u.contacts WHERE u.id = :id", name="GET Contacts")
+	@NamedQuery(query = "SELECT u FROM User u LEFT JOIN FETCH u.contacts WHERE u.idNo = :idNo", name="GET Contacts")
 })
-@XmlRootElement  
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -31,8 +27,8 @@ public class User implements Serializable {
 	}
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer idNo;
 	
 	private String email;
 	private String password;
@@ -45,7 +41,6 @@ public class User implements Serializable {
 		return contacts;
 	}
 
-	@XmlElement
 	public void setContacts(List<Contact> contacts) {
 		this.contacts = contacts;
 	}
@@ -57,13 +52,12 @@ public class User implements Serializable {
 	}
 	
 	
-	public int getId() {
-		return id;
+	public Integer getIdNo() {
+		return idNo;
 	}
 	
-	@XmlAttribute
-	public void setId(int id) {
-		this.id = id;
+	public void setIdNo(Integer idNo) {
+		this.idNo = idNo;
 	}
 	
 	
@@ -71,7 +65,6 @@ public class User implements Serializable {
 		return email;
 	}
 	
-	@XmlElement
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -83,6 +76,5 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 }
 

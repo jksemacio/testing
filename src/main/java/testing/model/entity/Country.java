@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name="testingCountry")
@@ -19,20 +18,20 @@ public class Country implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer idNo;
 	
 	private String country;
 	
 	@OneToMany(mappedBy="country")
 	private List<Contact> contacts;
 
-	public int getId() {
-		return id;
+	public Integer getIdNo() {
+		return idNo;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setIdNo(Integer idNo) {
+		this.idNo = idNo;
 	}
 
 	public String getCountry() {
@@ -47,7 +46,6 @@ public class Country implements Serializable {
 		return contacts;
 	}
 
-	@XmlTransient
 	public void setContacts(List<Contact> contacts) {
 		this.contacts = contacts;
 	}

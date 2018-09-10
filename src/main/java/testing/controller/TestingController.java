@@ -22,7 +22,7 @@ public class TestingController implements Serializable	{
 	private IUserDAO userDAO;
 	
 	public void search() {
-		user = userDAO.getById(user.getId());
+		user = userDAO.getByIdNo(user.getIdNo());
 	}
 	
 	public void add() {
@@ -34,7 +34,7 @@ public class TestingController implements Serializable	{
 	}
 	
 	public void remove() {
-	    userDAO.delete(user.getId());
+	    userDAO.delete(user.getIdNo());
 	}
 	
 	public User getUser() {

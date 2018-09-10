@@ -14,8 +14,8 @@ public class UserService implements IUserService {
 	private IUserDAO userDAO;
 	
 
-	public User getById(int id) {
-		return userDAO.getById(id);
+	public User getByIdNo(Integer idNo) {
+		return userDAO.getByIdNo(idNo);
 	}
 
 	public void add(User user) {
@@ -27,12 +27,12 @@ public class UserService implements IUserService {
 
 	}
 
-	public void delete(int id) {
-		userDAO.delete(id);
+	public void delete(Integer idNo) {
+		userDAO.delete(idNo);
 	}
 
-	public int getId(String email, String password) {
-		return userDAO.getId(email, password);
+	public int getIdNo(String email, String password) {
+		return userDAO.getIdNo(email, password);
 	}
 	
 	public List<User> getUsers() {

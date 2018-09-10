@@ -85,18 +85,18 @@ public class UserView {
 	}
 
 	public void delete() {
-		userService.delete(selectedUser.getId());
+		userService.delete(selectedUser.getIdNo());
 		users.remove(selectedUser);
 	}
 
 	public void addContact() {
-		contactService.add(contact, selectedUser.getId(), country.getId());
+		contactService.add(contact, selectedUser.getIdNo(), country.getIdNo());
 		contacts.add(contact);
 		contact = new Contact();
 	}
 
 	public void deleteContact() {
-		contactService.delete(contact.getId());
+		contactService.delete(contact.getIdNo());
 		contacts.remove(contact);
 	}
 
@@ -111,7 +111,7 @@ public class UserView {
 	}
 
 	public void initUserContacts() {
-		contacts = contactService.getContacts(selectedUser.getId());
+		contacts = contactService.getContacts(selectedUser.getIdNo());
 	}
 
 	public List<User> getUsers() {

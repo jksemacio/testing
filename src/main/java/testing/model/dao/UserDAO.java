@@ -15,8 +15,8 @@ public class UserDAO implements IUserDAO {
 	@PersistenceContext()
 	EntityManager entityManager;
 
-	public User getById(int id) {
-		return entityManager.find(User.class, id);
+	public User getByIdNo(Integer idNo) {
+		return entityManager.find(User.class, idNo);
 	}
 	
 	@Transactional
@@ -30,19 +30,19 @@ public class UserDAO implements IUserDAO {
 	}
 
 	@Transactional
-	public void delete(int id) {
-		User user = getById(id);
+	public void delete(Integer idNo) {
+		User user = getByIdNo(idNo);
 		if(user != null)
 		entityManager.remove(user);
 	}
 
-	public int getId(String email, String password) {
+	public Integer getIdNo(String email, String password) {
 		Query query = entityManager.createNamedQuery("FIND User BY Email AND Password");
 		query.setParameter("email", email);
 		query.setParameter("password", password);
 		
 		User user = (User) query.getSingleResult();
-		return user.getId();
+		return user.getIdNo();
 	}
 
 	public List<User> getUsers() {

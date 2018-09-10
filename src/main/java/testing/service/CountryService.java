@@ -19,8 +19,8 @@ public class CountryService implements ICountryService {
 		entityManager.persist(country);
 	}
 	
-	public Country getById(int id) {
-		return entityManager.find(Country.class, id);
+	public Country getByIdNo(Integer idNo) {
+		return entityManager.find(Country.class, idNo);
 	}
 
 	public List<Country> getCountries() {
