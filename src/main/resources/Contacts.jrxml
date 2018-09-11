@@ -128,34 +128,28 @@
 		</box>
 	</style>
 	<subDataset name="Contacts Dataset" uuid="5e7e9d37-b2b0-46db-ab1e-7a8598742544">
-		<queryString language="xPath">
-			<![CDATA[User/Contacts/Contact]]>
+		<queryString language="SQL">
+			<![CDATA[]]>
 		</queryString>
-		<field name="contactIdNo" class="java.lang.String">
-			<fieldDescription><![CDATA[@id]]></fieldDescription>
+		<field name="contactIdNo" class="java.lang.Integer">
+			<fieldDescription><![CDATA[idNo]]></fieldDescription>
 		</field>
 		<field name="contactName" class="java.lang.String">
-			<fieldDescription><![CDATA[Name]]></fieldDescription>
+			<fieldDescription><![CDATA[name]]></fieldDescription>
 		</field>
 		<field name="contactNumber" class="java.lang.String">
-			<fieldDescription><![CDATA[Number]]></fieldDescription>
+			<fieldDescription><![CDATA[number]]></fieldDescription>
 		</field>
 		<field name="contactCountry" class="java.lang.String">
-			<fieldDescription><![CDATA[Country]]></fieldDescription>
+			<fieldDescription><![CDATA[country.country]]></fieldDescription>
 		</field>
 	</subDataset>
-	<parameter name="idNo" class="java.lang.String"/>
-	<parameter name="email" class="java.lang.String"/>
+	<parameter name="Contacts" class="java.util.List"/>
 	<parameter name="ReportTitle" class="java.lang.String"/>
-	<field name="contacts" class="java.util.List">
-		<fieldDescription><![CDATA[/User/Contacts]]></fieldDescription>
-	</field>
-	<field name="Email" class="java.lang.String">
-		<fieldDescription><![CDATA[/User/Email]]></fieldDescription>
-	</field>
-	<field name="Id" class="java.lang.String">
-		<fieldDescription><![CDATA[/User/@id]]></fieldDescription>
-	</field>
+	<parameter name="User" class="User"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -176,18 +170,12 @@
 	<columnHeader>
 		<band height="40" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="40" uuid="6122dc4d-1027-40b5-b77c-cb7b75975915"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Id}]]></textFieldExpression>
+				<reportElement x="100" y="20" width="129" height="20" uuid="a1bc1d81-3d42-4322-a1c4-452e3d803900"/>
+				<textFieldExpression><![CDATA[$P{User}.getEmail()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="100" y="0" width="472" height="40" uuid="97b8bdd9-dba4-465e-9620-2cbefddfe1b5"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Email}]]></textFieldExpression>
+				<reportElement x="0" y="20" width="100" height="20" uuid="c6e9331f-1706-4b3e-82bd-0406a8241337"/>
+				<textFieldExpression><![CDATA[$P{User}.getIdNo()]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
@@ -196,8 +184,8 @@
 			<componentElement>
 				<reportElement key="table 5" style="table 5" x="0" y="0" width="572" height="50" uuid="ff74b9b1-0938-408a-bc69-b7f60bc01d98"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="Contacts Dataset" uuid="6a89f77d-01bc-42ab-8348-3199b13e2b0f">
-						<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JRXmlDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("User/Contacts/Contact")]]></dataSourceExpression>
+					<datasetRun subDataset="Contacts Dataset" uuid="7efa4a36-f26e-47b0-b40f-2b039036dc78">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{Contacts})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="90" uuid="0a6c71d8-0070-454e-847c-3e5ca125b347">
 						<jr:columnHeader style="table 5_CH" height="30">

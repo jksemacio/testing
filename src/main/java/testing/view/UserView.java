@@ -201,31 +201,37 @@ public class UserView {
 		if(selectedUser != null) {
 			InputStream stream = reportService.getReport(selectedUser, contacts);
 			return new DefaultStreamedContent(stream, "xls", "userContacts.xls");
+		} else {
+			return null;
 		}
-		return null;
 	}
 	
 	public StreamedContent getReportXML() throws IOException, JAXBException, ParserConfigurationException, TransformerException {
 		if(selectedUser != null) {
 			InputStream stream = reportService.getReportXML(selectedUser, contacts);
 			return new DefaultStreamedContent(stream, "xml", "userContacts.xml"); 
+		} else {
+			return null;
 		}
-		return null;
+		
 	}
 	
 	public StreamedContent getReportPDF() throws ConfigurationException, SAXException, IOException, TransformerException, ParserConfigurationException {
 		if(selectedUser != null) {
 			InputStream stream = reportService.getReportPDF(selectedUser, contacts);
 			return new DefaultStreamedContent(stream, "pdf", "userContacts.pdf");
+		} else {
+			return null;
 		}
-		return null;
+		
 	}
 	
 	public StreamedContent getReportJasper() throws JRException, FileNotFoundException, TransformerException, ParserConfigurationException {
 		if(selectedUser != null) {
 			InputStream stream = reportService.getReportJasper(selectedUser, contacts);
 			return new DefaultStreamedContent(stream, "pdf", "Contacts.pdf");
+		} else {
+			return null;
 		}
-		return null;
 	}
 }

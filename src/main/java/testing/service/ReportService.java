@@ -40,10 +40,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRXmlDataSource;
 import testing.model.entity.Contact;
 import testing.model.entity.User;
 
@@ -53,14 +53,14 @@ public class ReportService implements Serializable {
 	
 	private XSSFWorkbook workbook;
 	
-	public FileInputStream getReportJasper(User user, List<Contact> contacts) throws JRException, FileNotFoundException, ParserConfigurationException, TransformerException {
+	public FileInputStream getReportJasper(User user, List<Contact> contacts) throws JRException, FileNotFoundException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 	    parameters.put("ReportTitle", "List of Contacts");
-	    parameters.put("idNo", Integer.toString(user.getIdNo()));
-	    parameters.put("email", user.getEmail());
+	    parameters.put("User", user);
+	    parameters.put("Contacts", contacts);
 		ClassLoader classLoader = getClass().getClassLoader();
-		String jasperFile = new File(classLoader.getResource("Contacts.jasper").getFile()).getPath();
-		String jrprintFile = JasperFillManager.fillReportToFile(jasperFile, parameters, new JRXmlDataSource(getReportXML(user,contacts)));
+		String jasperFile = new File(classLoader.getResource("Contacts.jasper").getFile()).getAbsolutePath();
+		String jrprintFile = JasperFillManager.fillReportToFile(jasperFile, parameters, new JREmptyDataSource());
 		JasperExportManager.exportReportToPdfFile(jrprintFile, "Contacts.pdf");
 		
 	    File sampleJasperFile = new File("Contacts.pdf");
